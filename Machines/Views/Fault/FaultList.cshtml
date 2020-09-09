@@ -1,0 +1,53 @@
+﻿@model IEnumerable<FaultListViewModel>
+
+@{
+    ViewData["Title"] = "Faults";
+}
+
+<h1>Faults</h1>
+
+<p>
+    <a asp-action="AddFault">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Machine Id</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Priority</th>
+            <th>Date</th>
+            <th>Files</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Fault.Id</td>
+                <td>@item.Fault.Name</td>
+                <td>@item.Fault.MachineId </td>
+                <td>@item.Fault.Description </td>
+                <td>@item.Fault.Status</td>
+                <td>@item.Fault.Priority </td>
+                <td>@item.Fault.Date.DateTime</td>
+                <td>
+                    @foreach (var file in item.Files)
+                    {
+                        <a asp-action="DownloadFile" asp-controller="File" asp-route-fileId="@file.Id">
+                            @file.Name
+                        </a>
+                        <br />
+                    }
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "EditFault", new { id = item.Fault.Id }) |
+                    @Html.ActionLink("Delete", "DeleteFault", new { id = item.Fault.Id })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

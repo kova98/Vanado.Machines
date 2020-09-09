@@ -1,0 +1,112 @@
+﻿@model Machines.Models.EditFaultViewModel
+
+@{
+    ViewData["Title"] = $"{ViewBag.Action} Fault";
+}
+
+<h1>@ViewBag.Action Fault</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="SaveFault" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Fault.Name" class="control-label"></label>
+                <input asp-for="Fault.Name" id="name" class="form-control" />
+                <span asp-validation-for="Fault.Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Machine</label>
+                <select asp-for="Fault.MachineId" class="form-control"
+                        asp-items="@(new SelectList(Model.Machines, "Id", "Name", Model.Fault.MachineId))">
+                </select>
+                <span asp-validation-for="Fault.MachineId" class="text-danger"></span>
+
+            </div>
+            <div class="form-group">
+                <label asp-for="Fault.Description" class="control-label"></label>
+                <input asp-for="Fault.Description" id="description" class="form-control" />
+                <span asp-validation-for="Fault.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Fault.Status" class="control-label"></label>
+                <select asp-for="Fault.Status" asp-items="Html.GetEnumSelectList<FaultStatus>()" class="form-control">
+                </select>
+                <span asp-validation-for="Fault.Status" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Fault.Priority" class="control-label"></label>
+                <input asp-for="Fault.Priority" class="form-control" />
+                <span asp-validation-for="Fault.Priority" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Fault.Date" class="control-label"></label>
+                <input asp-for="Fault.Date" type="datetime-local" class="form-control" />
+                <span asp-validation-for="Fault.Date" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Files</label>
+                <table class="table">
+                    <tbody>
+                        @foreach (var file in Model.Files)
+                        {
+                            <tr>
+                                <td>@file.Name</td>
+                                <td class="text-right">
+                                    <a asp-action="DownloadFile" asp-controller="File" 
+                                       asp-route-fileId="@file.Id" asp-route-faultId="@Model.Fault.Id">
+                                        Download
+                                    </a> | 
+                                    <a asp-action="DeleteFile" asp-controller="File" 
+                                       asp-route-fileId="@file.Id" asp-route-faultId="@Model.Fault.Id">
+                                        Delete
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div class="custom-file">
+                    <input type="file" multiple class="custom-file-input" id="file_input" name="files">
+                    <label class="custom-file-label" for="file_input">Attach files</label>
+                </div>
+            </div>
+
+            <input asp-for="Fault.Id" class="form-control" hidden readonly />
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        var description = document.getElementById('description');
+
+        $(document).ready(function () {
+            var name = document.getElementById('description');
+            if (name.value.length < 20) {
+                description.disabled = true;
+            }
+        });
+
+        $('#name').on('input', function () {
+            if (this.value.length < 20) {
+                description.disabled = true;
+            } else {
+                description.disabled = false;
+            }
+        });
+    </script>
+    
+}

@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Machines.Models.Machine>
+
+@{
+    ViewData["Title"] = "Machines";
+}
+
+<h1>Machines</h1>
+
+<p>
+    <a asp-action="AddMachine">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>@item.Id</td>
+            <td>@item.Name</td>
+            <td>
+                @Html.ActionLink("Edit", "EditMachine", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "DeleteMachine", new { id = item.Id }) |
+                @Html.ActionLink("Faults", "MachineFaults", new { id = item.Id }) 
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,28 @@
+﻿@model IEnumerable<UnresolvedFaultViewModel>
+
+<h1>Unresolved Faults</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Machine Name</th>
+            <th>Priority</th>
+            <th>Date</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>@item.Name</td>
+            <td>@item.MachineName</td>
+            <td>@item.Priority</td>
+            <td>@item.Date.DateTime</td>
+            <td>
+                <a asp-action="MarkResolved" asp-controller="Fault" asp-route-id="@item.Id">Mark Resolved</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
